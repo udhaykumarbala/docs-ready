@@ -108,11 +108,13 @@ describe("CLI integration", () => {
   }, 15000);
 
   it("init detects Docusaurus fixture project correctly", async () => {
+    // Copy fixture to tmpDir to avoid mutating the fixture directory
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "docs-ready-docusaurus-"));
     const fixtureDir = path.resolve("tests/fixtures/docusaurus-project");
-    const configPath = path.join(fixtureDir, ".docs-ready.yaml");
+    await fs.cp(fixtureDir, tmpDir, { recursive: true });
 
     try {
-      const result = await runInitWithAnswers(fixtureDir, [
+      const result = await runInitWithAnswers(tmpDir, [
         "Docusaurus Test",
         "A Docusaurus site",
         "https://docs.example.com",
@@ -121,15 +123,14 @@ describe("CLI integration", () => {
       expect(result.code).toBe(0);
       expect(result.stdout).toContain("docusaurus");
 
-      const configContent = await fs.readFile(configPath, "utf-8");
+      const configContent = await fs.readFile(
+        path.join(tmpDir, ".docs-ready.yaml"),
+        "utf-8"
+      );
       const config = YAML.parse(configContent);
       expect(config.docs.dir).toBe("./docs");
     } finally {
-      try {
-        await fs.unlink(configPath);
-      } catch {
-        // Ignore
-      }
+      await fs.rm(tmpDir, { recursive: true });
     }
   }, 15000);
 });
