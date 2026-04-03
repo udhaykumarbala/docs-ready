@@ -1,0 +1,64 @@
+{
+  "name": "docs-ready",
+  "version": "0.1.0",
+  "description": "Make your docs AI-ready. Keep them that way.",
+  "type": "module",
+  "bin": {
+    "docs-ready": "./dist/cli/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "docs-ready",
+    "llms-txt",
+    "llms.txt",
+    "ai-context",
+    "documentation",
+    "ai-ready",
+    "llm",
+    "docusaurus",
+    "vitepress",
+    "mkdocs"
+  ],
+  "author": "udhaykumarbala",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/udhaykumarbala/docs-ready"
+  },
+  "homepage": "https://github.com/udhaykumarbala/docs-ready",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "glob": "^11.0.0",
+    "gray-matter": "^4.0.3",
+    "ora": "^8.1.0",
+    "yaml": "^2.5.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.2.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  }
+}
