@@ -1,6 +1,6 @@
 {
   "name": "docs-ready",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Make your docs AI-ready. Keep them that way.",
   "type": "module",
   "bin": {
