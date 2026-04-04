@@ -21,25 +21,15 @@ describe("scanDocs", () => {
   });
 
   it("handles .mdx files with JSX content", async () => {
-    const fs = await import("node:fs/promises");
-    const mdxPath = path.join(DOCUSAURUS_DOCS, "test-component.mdx");
-    await fs.writeFile(
-      mdxPath,
-      '---\ntitle: Component Demo\ndescription: Shows a component\n---\n\nimport MyComponent from "@site/src/components/MyComponent";\n\n# Component Demo\n\n<MyComponent />\n'
-    );
+    // Uses the existing mdx-example.mdx fixture (no temp file creation to avoid race conditions)
+    const pages = await scanDocs(DOCUSAURUS_DOCS, {
+      include: ["**/*.md", "**/*.mdx"],
+      exclude: [],
+    });
 
-    try {
-      const pages = await scanDocs(DOCUSAURUS_DOCS, {
-        include: ["**/*.md", "**/*.mdx"],
-        exclude: [],
-      });
-
-      const mdxPage = pages.find((p) => p.relativePath === "test-component.mdx");
-      expect(mdxPage).toBeDefined();
-      expect(mdxPage!.title).toBe("Component Demo");
-    } finally {
-      await fs.unlink(mdxPath);
-    }
+    const mdxPage = pages.find((p) => p.relativePath === "guides/mdx-example.mdx");
+    expect(mdxPage).toBeDefined();
+    expect(mdxPage!.title).toBe("MDX Example");
   });
 
   it("respects include/exclude glob patterns", async () => {
