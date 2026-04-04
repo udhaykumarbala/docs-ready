@@ -39,8 +39,11 @@ async function main(): Promise<void> {
   program
     .command("generate")
     .description("Generate AI-facing documentation files")
-    .action(() => {
-      console.log("Generate command coming in v0.2.0");
+    .option("--dry-run", "Show what would be generated without writing files")
+    .option("--only <type>", "Generate only: llms-txt or llms-full")
+    .action(async (opts) => {
+      const { generateCommand } = await import("./commands/generate.js");
+      await generateCommand({ dryRun: opts.dryRun, only: opts.only });
     });
 
   program
