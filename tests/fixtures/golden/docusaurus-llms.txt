@@ -1,0 +1,29 @@
+# Test Project
+
+> A test project for generation
+
+## Api
+
+- [API Overview](https://docs.example.com/api/overview): Overview of the API endpoints
+- [API Endpoints](https://docs.example.com/api/endpoints): Detailed endpoint reference
+
+## Concepts
+
+- [Architecture](https://docs.example.com/concepts/architecture): System architecture overview
+- [Security](https://docs.example.com/concepts/security): Security best practices
+
+## General
+
+- [Getting Started](https://docs.example.com/getting-started): Learn how to set up the project
+- [Changelog](https://docs.example.com/changelog): - Initial release
+
+## Guides
+
+- [Tutorial](https://docs.example.com/guides/tutorial): Step-by-step tutorial
+- [Advanced Usage](https://docs.example.com/guides/advanced): Advanced patterns and techniques
+- [MDX Example](https://docs.example.com/guides/mdx-example): A page with MDX components
+
+## Reference
+
+- [Configuration Reference](https://docs.example.com/reference/config): All configuration options
+- [CLI Reference](https://docs.example.com/reference/cli): Command-line interface reference
