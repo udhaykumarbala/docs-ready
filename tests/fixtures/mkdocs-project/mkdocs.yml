@@ -1,0 +1,7 @@
+site_name: My MkDocs Site
+site_url: https://docs.example.com
+nav:
+  - Home: index.md
+  - Guide:
+    - Getting Started: guide/getting-started.md
+    - Configuration: guide/configuration.md
