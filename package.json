@@ -4,7 +4,7 @@
   "description": "Make your docs AI-ready. Keep them that way.",
   "type": "module",
   "bin": {
-    "docs-ready": "./dist/cli/index.js"
+    "docs-ready": "./dist/index.js"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
