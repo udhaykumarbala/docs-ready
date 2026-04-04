@@ -59,8 +59,10 @@ async function main(): Promise<void> {
   program
     .command("validate")
     .description("Lint and validate AI-facing docs")
-    .action(() => {
-      console.log("Validate command coming in v0.6.0");
+    .option("--no-links", "Skip link checking")
+    .action(async (opts) => {
+      const { validateCommand } = await import("./commands/validate.js");
+      await validateCommand({ checkLinks: opts.links });
     });
 
   await program.parseAsync(process.argv);
