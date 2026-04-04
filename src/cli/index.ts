@@ -50,9 +50,10 @@ async function main(): Promise<void> {
     .command("guard")
     .description("Check AI-facing docs for staleness")
     .option("--output <format>", "Output format: console, json, or markdown", "console")
+    .option("--init-workflow", "Generate GitHub Actions workflow file")
     .action(async (opts) => {
       const { guardCommand } = await import("./commands/guard.js");
-      await guardCommand({ output: opts.output });
+      await guardCommand({ output: opts.output, initWorkflow: opts.initWorkflow });
     });
 
   program

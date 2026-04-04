@@ -1,3 +1,5 @@
+import fs from "node:fs/promises";
+import path from "node:path";
 import { loadConfig } from "../../core/config.js";
 import { runGuard, getExitCode } from "../../guard/runner.js";
 import { formatConsole } from "../../guard/reporters/console.js";
@@ -7,11 +9,22 @@ import { log, spinner } from "../../utils/logger.js";
 
 interface GuardOptions {
   output?: string;
+  initWorkflow?: boolean;
 }
 
 export async function guardCommand(options: GuardOptions = {}): Promise<void> {
   const cwd = process.cwd();
   const config = await loadConfig(cwd);
+
+  if (options.initWorkflow) {
+    const { generateWorkflowYaml } = await import("../../guard/workflow.js");
+    const yaml = generateWorkflowYaml(config);
+    const workflowDir = path.join(cwd, ".github", "workflows");
+    await fs.mkdir(workflowDir, { recursive: true });
+    await fs.writeFile(path.join(workflowDir, "docs-ready-guard.yml"), yaml, "utf-8");
+    log.success("Generated .github/workflows/docs-ready-guard.yml");
+    return;
+  }
 
   const totalChecks =
     config.guard.npm_packages.length +
