@@ -49,8 +49,10 @@ async function main(): Promise<void> {
   program
     .command("guard")
     .description("Check AI-facing docs for staleness")
-    .action(() => {
-      console.log("Guard command coming in v0.4.0");
+    .option("--output <format>", "Output format: console, json, or markdown", "console")
+    .action(async (opts) => {
+      const { guardCommand } = await import("./commands/guard.js");
+      await guardCommand({ output: opts.output });
     });
 
   program
