@@ -67,4 +67,29 @@ export async function generateCommand(options: GenerateOptions = {}): Promise<vo
       log.success(`Generated llms-full.txt (${formatTokens(estimateTokens(llmsFullTxt))})`);
     }
   }
+
+  // Generate ai-context.md
+  if (config.generate.ai_context && options.only !== "llms-txt" && options.only !== "llms-full") {
+    const { generateAiContext } = await import("../../generate/ai-context.js");
+    const aiContext = generateAiContext(pages, {
+      title: config.title,
+      description: config.description,
+      aiContextConfig: config.generate.ai_context_config ? {
+        key_pages: config.generate.ai_context_config.key_pages,
+        extra_sections: config.generate.ai_context_config.extra_sections?.map((s) => ({
+          title: s.title,
+          content: s.source ?? "",
+        })),
+      } : undefined,
+    });
+
+    if (options.dryRun) {
+      log.info("[dry-run] Would write ai-context.md");
+      log.dim(`  ${aiContext.length} chars, ${formatTokens(estimateTokens(aiContext))}`);
+    } else {
+      await fs.mkdir(outputDir, { recursive: true });
+      await fs.writeFile(path.join(outputDir, "ai-context.md"), aiContext, "utf-8");
+      log.success(`Generated ai-context.md (${formatTokens(estimateTokens(aiContext))})`);
+    }
+  }
 }

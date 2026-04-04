@@ -40,7 +40,7 @@ async function main(): Promise<void> {
     .command("generate")
     .description("Generate AI-facing documentation files")
     .option("--dry-run", "Show what would be generated without writing files")
-    .option("--only <type>", "Generate only: llms-txt or llms-full")
+    .option("--only <type>", "Generate only: llms-txt, llms-full, or ai-context")
     .action(async (opts) => {
       const { generateCommand } = await import("./commands/generate.js");
       await generateCommand({ dryRun: opts.dryRun, only: opts.only });
