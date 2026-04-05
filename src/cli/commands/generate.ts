@@ -10,6 +10,7 @@ import { log, spinner } from "../../utils/logger.js";
 interface GenerateOptions {
   dryRun?: boolean;
   only?: string;
+  watch?: boolean;
 }
 
 export async function generateCommand(options: GenerateOptions = {}): Promise<void> {
@@ -91,5 +92,21 @@ export async function generateCommand(options: GenerateOptions = {}): Promise<vo
       await fs.writeFile(path.join(outputDir, "ai-context.md"), aiContext, "utf-8");
       log.success(`Generated ai-context.md (${formatTokens(estimateTokens(aiContext))})`);
     }
+  }
+
+  // Watch mode
+  if (options.watch) {
+    log.info("Watching for changes... (press Ctrl+C to stop)");
+    const { watchDocs } = await import("../../utils/watcher.js");
+    watchDocs({
+      dir: docsDir,
+      patterns: config.docs.include,
+      onChange: async () => {
+        log.info("Changes detected, regenerating...");
+        await generateCommand({ ...options, watch: false });
+      },
+    });
+    // Keep process alive
+    await new Promise(() => {});
   }
 }
