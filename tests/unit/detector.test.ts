@@ -18,15 +18,9 @@ describe("detectFramework", () => {
   });
 
   it("identifies MkDocs from mkdocs.yml", async () => {
-    const fixtureDir = path.join(FIXTURES, "mkdocs-project");
-    const fs = await import("node:fs/promises");
-    await fs.mkdir(fixtureDir, { recursive: true });
-    await fs.writeFile(path.join(fixtureDir, "mkdocs.yml"), "site_name: Test\n");
-
-    const result = await detectFramework(fixtureDir);
+    const result = await detectFramework(path.join(FIXTURES, "mkdocs-project"));
     expect(result.name).toBe("mkdocs");
-
-    await fs.rm(fixtureDir, { recursive: true });
+    expect(result.configFile).toContain("mkdocs.yml");
   });
 
   it("falls back to generic for plain markdown", async () => {
