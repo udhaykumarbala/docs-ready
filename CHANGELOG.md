@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2026-04-04
+
+### Added
+- Edge case tests for empty docs, no frontmatter, non-UTF-8, empty content
+- Production-ready stable release
+
+### Changed
+- Semantic versioning commitment from this point forward
+
 ## [0.9.0] - 2026-04-03
 
 ### Added
@@ -106,6 +115,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `docusaurus-plugin-llms` detection -- disables duplicate generation when the plugin is present
 - Config template system with YAML template rendering
 
+[1.0.0]: https://github.com/udhaykumarbala/docs-ready/compare/v0.9.0...v1.0.0
 [0.9.0]: https://github.com/udhaykumarbala/docs-ready/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/udhaykumarbala/docs-ready/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/udhaykumarbala/docs-ready/compare/v0.6.0...v0.7.0
