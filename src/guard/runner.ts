@@ -5,29 +5,45 @@ import { checkEndpoint } from "./monitors/endpoints.js";
 import { scanReadme } from "./monitors/readme-keywords.js";
 import type { DocsReadyConfig } from "../core/config.js";
 
-export async function runGuard(config: DocsReadyConfig): Promise<GuardResult[]> {
-  const results: GuardResult[] = [];
+export async function runGuard(config: DocsReadyConfig, concurrency = 5): Promise<GuardResult[]> {
+  const tasks: Array<() => Promise<GuardResult>> = [];
 
-  // npm monitors
   for (const pkg of config.guard.npm_packages) {
-    results.push(await checkNpmPackage(pkg));
+    tasks.push(() => checkNpmPackage(pkg));
   }
-
-  // GitHub release monitors
   for (const release of config.guard.github_releases) {
-    results.push(await checkGitHubRelease(release));
+    tasks.push(() => checkGitHubRelease(release));
   }
-
-  // Endpoint monitors
   for (const endpoint of config.guard.endpoints) {
-    results.push(await checkEndpoint(endpoint));
+    tasks.push(() => checkEndpoint(endpoint));
   }
-
-  // README scans
   for (const scan of config.guard.readme_scans) {
-    results.push(await scanReadme(scan));
+    tasks.push(() => scanReadme(scan));
   }
 
+  return runWithConcurrency(tasks, concurrency);
+}
+
+async function runWithConcurrency(
+  tasks: Array<() => Promise<GuardResult>>,
+  concurrency: number
+): Promise<GuardResult[]> {
+  const results: GuardResult[] = [];
+  const executing = new Set<Promise<void>>();
+
+  for (const task of tasks) {
+    const p = task().then((result) => {
+      results.push(result);
+    });
+    executing.add(p);
+    p.finally(() => executing.delete(p));
+
+    if (executing.size >= concurrency) {
+      await Promise.race(executing);
+    }
+  }
+
+  await Promise.all(executing);
   return results;
 }
 

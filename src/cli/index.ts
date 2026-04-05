@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { initCommand } from "./commands/init.js";
+import { setLogLevel } from "../utils/logger.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -27,7 +28,19 @@ async function main(): Promise<void> {
   program
     .name("docs-ready")
     .description("Make your docs AI-ready. Keep them that way.")
-    .version(version);
+    .version(version)
+    .option("--quiet", "Only show errors")
+    .option("--verbose", "Show debug logging")
+    .option("--no-color", "Disable colored output");
+
+  program.hook("preAction", (thisCommand) => {
+    const opts = thisCommand.opts();
+    if (opts.quiet) {
+      setLogLevel("quiet");
+    } else if (opts.verbose) {
+      setLogLevel("verbose");
+    }
+  });
 
   program
     .command("init")
@@ -41,9 +54,10 @@ async function main(): Promise<void> {
     .description("Generate AI-facing documentation files")
     .option("--dry-run", "Show what would be generated without writing files")
     .option("--only <type>", "Generate only: llms-txt, llms-full, or ai-context")
+    .option("--watch", "Watch for changes and regenerate")
     .action(async (opts) => {
       const { generateCommand } = await import("./commands/generate.js");
-      await generateCommand({ dryRun: opts.dryRun, only: opts.only });
+      await generateCommand({ dryRun: opts.dryRun, only: opts.only, watch: opts.watch });
     });
 
   program
